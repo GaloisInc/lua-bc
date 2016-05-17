@@ -1,0 +1,8 @@
+.*.swp
+/dist
+/dist-newstyle
+/.stack-work
+/.cabal-sandbox
+/cabal.sandbox.config
+/stack.yaml
+/cabal.project.local
