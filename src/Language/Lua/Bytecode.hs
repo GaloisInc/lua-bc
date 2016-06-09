@@ -146,6 +146,10 @@ propagateSources = go B.empty
 plusReg :: Reg -> Int {- ^ offset -} -> Reg
 plusReg (Reg i) j = Reg (i+j)
 
+-- | Compute the distance between two registers.
+diffReg :: Reg -> Reg -> Int
+diffReg (Reg i) (Reg j) = i - j
+
 -- | Compute a list of registers given a startin register and length.
 regRange :: Reg {- ^ start -} -> Int {- ^ length -} -> [Reg]
 regRange start n = take n [start ..]

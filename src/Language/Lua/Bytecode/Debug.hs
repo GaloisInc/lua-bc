@@ -1,7 +1,8 @@
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE RecordWildCards, OverloadedStrings #-}
 module Language.Lua.Bytecode.Debug where
 
-import Data.ByteString (ByteString, append)
+import Data.ByteString (ByteString,append)
+import qualified Data.ByteString.Char8 as BS
 import qualified Data.Vector as Vector
 import           Data.String(fromString)
 import           Data.Map ( Map )
@@ -101,44 +102,65 @@ inferFunctionName fun pc0 =
                         RK_Kst (Kst n) ->
                           do v <- funcConstants fun Vector.!? n
                              case v of
-                               KString lab -> return lab
+                               KString lab -> return (append "." lab)
+                               KInt x      -> return (numIx x)
+                               KNum x      -> return (numIx x)
                                _           -> Nothing
                         RK_Reg _ -> Nothing
 
-  jn x y            = append x (append (fromString ".") y)
+  numIx x           = BS.concat [ "[", BS.pack (show x), "]" ]
 
 
-  -- Look forward for an instraction that puts a given register in a table.
+  -- Look forward for an instruction that puts a given register in place with a known name.
   findForward r pc =
     case getLoc pc r of
       Just x  -> return x
       Nothing ->
         do op <- getOp pc
            case op of
+
+             -- Placed in a register
              OP_MOVE r1 r2
                | r == r2  -> findForward r1 (pc + 1)
 
+             -- Placed in a table
              OP_SETTABLE r1 k (RK_Reg r2)
                | r2 == r -> do nm  <- getNameFor r1 pc
                                lab <- getLab k
-                               return (jn nm lab)
+                               return (append nm lab)
 
+             -- Placed in an up-value
              OP_SETUPVAL r2 u
                 | r2 == r -> getUp u
 
+             -- Placed in an up-value table
              OP_SETTABUP u k (RK_Reg r2)
                 | r2 == r -> do nm  <- getUp u
                                 lab <- getLab k
-                                return (jn nm lab)
+                                return (append nm lab)
 
+             -- Placed in a table, many indices at once
+             OP_SETLIST t howMany from
+                | t < r && (howMany == 0 || r <= plusReg t howMany) ->
+                  do nm <- getNameFor t pc
+                     start <-
+                       if from == 0
+                          then do OP_EXTRAARG s <- getOp (pc + 1)
+                                  return s
+                          else return ((from - 1) * 50)
+                     return (append nm (numIx (start + (diffReg r t))))
+
+             -- Passed as an argument to a function
              OP_CALL r2 _ _
                | r2 <= r -> return (fromString "_")
 
+             -- Passed as an argument to a function
              OP_TAILCALL r2 _ _
                | r2 <= r -> return (fromString "_")
 
              _ -> findForward r (pc + 1)
 
+  -- Find the name of a register
   findBack r pc =
     do op <- getOp pc
        case op of
@@ -146,7 +168,7 @@ inferFunctionName fun pc0 =
          OP_GETTABLE r1 r2 k
             | r1 == r -> do nm  <- getNameFor r2 pc
                             lab <- getLab k
-                            return (jn nm lab)
+                            return (append nm lab)
 
          OP_GETUPVAL r1 u
             | r1 == r  -> getUp u
@@ -154,7 +176,7 @@ inferFunctionName fun pc0 =
          OP_GETTABUP r1 u k
             | r1 == r  -> do nm  <- getUp u
                              lab <- getLab k
-                             return (jn nm lab)
+                             return (append nm lab)
 
          OP_NEWTABLE r1 _ _
             | r1 == r -> findForward r (pc + 1)
