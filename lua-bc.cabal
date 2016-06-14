@@ -1,5 +1,5 @@
 name:                lua-bc
-version:             0.1.1
+version:             0.1.0.1
 synopsis:            Lua bytecode parser
 description:         Lua bytecode parser
 license:             MIT
@@ -12,7 +12,7 @@ build-type:          Simple
 cabal-version:       >=1.10
 homepage:            https://github.com/GaloisInc/lua-bc
 bug-reports:         https://github.com/GaloisInc/lua-bc/issues
-tested-with:         GHC==7.10.3
+tested-with:         GHC==7.10.3, GHC==8.0.1
 
 extra-source-files:
   README.md
