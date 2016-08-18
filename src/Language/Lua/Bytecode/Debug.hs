@@ -3,6 +3,7 @@ module Language.Lua.Bytecode.Debug where
 
 import Data.ByteString (ByteString,append)
 import qualified Data.ByteString.Char8 as BS
+import           Data.Vector (Vector)
 import qualified Data.Vector as Vector
 import           Data.String(fromString)
 import           Data.Map ( Map )
@@ -17,6 +18,9 @@ import Language.Lua.Bytecode.FunId
 ------------------------------------------------------------------------
 -- Debugging functions
 ------------------------------------------------------------------------
+
+
+
 
 lookupLineNumber ::
   Function ->
@@ -63,10 +67,17 @@ lookupLocalName func = \pc (Reg x) -> do vs <- memo Vector.!? pc
                                          vs Vector.!? x
   where
   memo      = Vector.generate (Vector.length (funcCode func)) locals
-  locals pc = Vector.map varInfoName
-            $ Vector.filter (\x -> pc < varInfoEnd x)
-            $ Vector.takeWhile (\x -> varInfoStart x <= pc)
-            $ debugInfoVars (funcDebug func)
+  locals pc = Vector.map varInfoName $ getRegistersAt func pc
+
+-- | Get what registers are in scope at a particular op-code.
+-- R1 is at entry 0, R2 is entry 1, etc.
+-- NOTE that there might be multiple registers with the same named thing.
+-- The one currently in scope is the last one.
+getRegistersAt :: Function -> Int {-^PC-} -> Vector VarInfo
+getRegistersAt func pc = Vector.filter (\x -> pc < varInfoEnd x)
+                       $ Vector.takeWhile (\x -> varInfoStart x <= pc)
+                       $ debugInfoVars (funcDebug func)
+
 
 
 
