@@ -11,6 +11,7 @@ import Data.Text.Encoding(decodeUtf8With)
 import Data.Text.Encoding.Error(lenientDecode)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Vector as Vector
+import Numeric (showHex)
 
 data PPInfo = PPInfo
   { ppVarAt    :: Int -> Reg  -> Maybe Doc
@@ -87,7 +88,17 @@ instance PP Constant where
       KString bs    -> str bs
       KLongString b -> str b
 
-    where str = text . show . decodeUtf8With lenientDecode
+    where str = text . showLuaString
+
+showLuaString :: BS.ByteString -> String
+showLuaString bs = '"' : BS.foldr show1 "\"" bs
+  where
+    show1 x
+      | x == '"'                = showString "\\\""
+      | x == '\\'               = showString "\\\\"
+      | '\x20' <= x, x < '\x7f' = showChar x
+      | '\x10' <= x             = showString "\\x"  . showHex (fromEnum x)
+      | otherwise               = showString "\\x0" . showHex (fromEnum x)
 
 
 class PP a where
@@ -265,6 +276,3 @@ instance PP OpCode where
         case ppExtraArg i of
           Just _  -> empty
           Nothing -> nest 2 (text "where extra =" <+> int n)
-
-
-

@@ -11,6 +11,7 @@ instance Enum Reg where
   toEnum = Reg
   fromEnum (Reg r) = r
 
+-- | Zero-based index into upvalues
 newtype UpIx = UpIx Int
  deriving (Read,Show,Eq,Ord)
 
