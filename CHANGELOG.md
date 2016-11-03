@@ -1,3 +1,8 @@
+0.1.0.2
+---
+
+* Fix bug in rendering SETUPVAL opcode
+
 0.1.0.1
 ---
 

@@ -204,7 +204,7 @@ instance PP OpCode where
       OP_GETTABLE a b c -> a =: lkp b c
 
       OP_SETTABUP a b c -> lkp a b =: c
-      OP_SETUPVAL a b   -> a       =: b
+      OP_SETUPVAL a b   -> b       =: a
       OP_SETTABLE a b c -> lkp a b =: c
 
       OP_NEWTABLE a b c -> a =: (text "{}" <+> parens (text "array size =" <+>
