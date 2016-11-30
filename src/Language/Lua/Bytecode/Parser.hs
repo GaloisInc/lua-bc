@@ -466,63 +466,63 @@ loadInstruction52 =
               | otherwise            = RK_Reg (Reg x)
          sBx = bx - ((1 `shiftL` (size_Bx-1)) - 1)
      case op of
-       0  -> return $ OP_MOVE (Reg a) (Reg b)
-       1  -> return $ OP_LOADK (Reg a) (Kst bx)
-       2  -> return $ OP_LOADKX (Reg a)
-       3  -> return $ OP_LOADBOOL (Reg a) (b /= 0) (c /= 0)
-       4  -> return $ OP_LOADNIL  (Reg a) b
-       5  -> return $ OP_GETUPVAL (Reg a) (UpIx b)
+       0  -> return $! OP_MOVE (Reg a) (Reg b)
+       1  -> return $! OP_LOADK (Reg a) (Kst bx)
+       2  -> return $! OP_LOADKX (Reg a)
+       3  -> return $! OP_LOADBOOL (Reg a) (b /= 0) (c /= 0)
+       4  -> return $! OP_LOADNIL  (Reg a) b
+       5  -> return $! OP_GETUPVAL (Reg a) (UpIx b)
 
-       6  -> return $ OP_GETTABUP (Reg a) (UpIx b) (rk c)
-       7  -> return $ OP_GETTABLE (Reg a) (Reg b) (rk c)
+       6  -> return $! OP_GETTABUP (Reg a) (UpIx b) (rk c)
+       7  -> return $! OP_GETTABLE (Reg a) (Reg b) (rk c)
 
-       8  -> return $ OP_SETTABUP (UpIx a) (rk b) (rk c)
-       9  -> return $ OP_SETUPVAL (Reg a) (UpIx b)
-       10 -> return $ OP_SETTABLE (Reg a) (rk b) (rk c)
+       8  -> return $! OP_SETTABUP (UpIx a) (rk b) (rk c)
+       9  -> return $! OP_SETUPVAL (Reg a) (UpIx b)
+       10 -> return $! OP_SETTABLE (Reg a) (rk b) (rk c)
 
-       11 -> return $ OP_NEWTABLE (Reg a) (fb2int b) (fb2int c)
+       11 -> return $! OP_NEWTABLE (Reg a) (fb2int b) (fb2int c)
 
-       12 -> return $ OP_SELF     (Reg a) (Reg b) (rk c)
+       12 -> return $! OP_SELF     (Reg a) (Reg b) (rk c)
 
-       13 -> return $ OP_ADD      (Reg a) (rk b) (rk c)
-       14 -> return $ OP_SUB      (Reg a) (rk b) (rk c)
-       15 -> return $ OP_MUL      (Reg a) (rk b) (rk c)
-       16 -> return $ OP_DIV      (Reg a) (rk b) (rk c)
-       17 -> return $ OP_MOD      (Reg a) (rk b) (rk c)
-       18 -> return $ OP_POW      (Reg a) (rk b) (rk c)
-       19 -> return $ OP_UNM      (Reg a) (Reg b)
-       20 -> return $ OP_NOT      (Reg a) (Reg b)
-       21 -> return $ OP_LEN      (Reg a) (Reg b)
+       13 -> return $! OP_ADD      (Reg a) (rk b) (rk c)
+       14 -> return $! OP_SUB      (Reg a) (rk b) (rk c)
+       15 -> return $! OP_MUL      (Reg a) (rk b) (rk c)
+       16 -> return $! OP_DIV      (Reg a) (rk b) (rk c)
+       17 -> return $! OP_MOD      (Reg a) (rk b) (rk c)
+       18 -> return $! OP_POW      (Reg a) (rk b) (rk c)
+       19 -> return $! OP_UNM      (Reg a) (Reg b)
+       20 -> return $! OP_NOT      (Reg a) (Reg b)
+       21 -> return $! OP_LEN      (Reg a) (Reg b)
 
-       22 -> return $ OP_CONCAT   (Reg a) (Reg b) (Reg c)
+       22 -> return $! OP_CONCAT   (Reg a) (Reg b) (Reg c)
 
        23 -> let r | a == 0 = Nothing
                    | otherwise = Just (Reg (a-1))
-             in return $ OP_JMP r sBx
-       24 -> return $ OP_EQ        (a /= 0) (rk b) (rk c)
-       25 -> return $ OP_LT        (a /= 0) (rk b) (rk c)
-       26 -> return $ OP_LE        (a /= 0) (rk b) (rk c)
+             in return $! OP_JMP r sBx
+       24 -> return $! OP_EQ        (a /= 0) (rk b) (rk c)
+       25 -> return $! OP_LT        (a /= 0) (rk b) (rk c)
+       26 -> return $! OP_LE        (a /= 0) (rk b) (rk c)
 
-       27 -> return $ OP_TEST      (Reg a) (c /= 0)
-       28 -> return $ OP_TESTSET   (Reg a) (Reg b) (c /= 0)
+       27 -> return $! OP_TEST      (Reg a) (c /= 0)
+       28 -> return $! OP_TESTSET   (Reg a) (Reg b) (c /= 0)
 
-       29 -> return $ OP_CALL      (Reg a) (mkCount b) (mkCount c)
-       30 -> return $ OP_TAILCALL  (Reg a) (mkCount b) (mkCount c)
-       31 -> return $ OP_RETURN    (Reg a) (mkCount b)
+       29 -> return $! OP_CALL      (Reg a) (mkCount b) (mkCount c)
+       30 -> return $! OP_TAILCALL  (Reg a) (mkCount b) (mkCount c)
+       31 -> return $! OP_RETURN    (Reg a) (mkCount b)
 
-       32 -> return $ OP_FORLOOP   (Reg a) sBx
-       33 -> return $ OP_FORPREP   (Reg a) sBx
+       32 -> return $! OP_FORLOOP   (Reg a) sBx
+       33 -> return $! OP_FORPREP   (Reg a) sBx
 
-       34 -> return $ OP_TFORCALL  (Reg a) c
-       35 -> return $ OP_TFORLOOP  (Reg a) sBx
+       34 -> return $! OP_TFORCALL  (Reg a) c
+       35 -> return $! OP_TFORLOOP  (Reg a) sBx
 
-       36 -> return $ OP_SETLIST  (Reg a) b c
+       36 -> return $! OP_SETLIST  (Reg a) b c
 
-       37 -> return $ OP_CLOSURE  (Reg a) (ProtoIx bx)
+       37 -> return $! OP_CLOSURE  (Reg a) (ProtoIx bx)
 
-       38 -> return $ OP_VARARG   (Reg a) (mkCount b)
+       38 -> return $! OP_VARARG   (Reg a) (mkCount b)
 
-       39 -> return $ OP_EXTRAARG ax
+       39 -> return $! OP_EXTRAARG ax
 
        _  -> fail   $ "Bad instruction: 0x" ++ showHex raw ""
 
@@ -539,70 +539,70 @@ loadInstruction53 =
               | otherwise            = RK_Reg (Reg x)
          sBx = bx - ((1 `shiftL` (size_Bx-1)) - 1)
      case op of
-       0  -> return $ OP_MOVE (Reg a) (Reg b)
-       1  -> return $ OP_LOADK (Reg a) (Kst bx)
-       2  -> return $ OP_LOADKX (Reg a)
-       3  -> return $ OP_LOADBOOL (Reg a) (b /= 0) (c /= 0)
-       4  -> return $ OP_LOADNIL  (Reg a) b
-       5  -> return $ OP_GETUPVAL (Reg a) (UpIx b)
+       0  -> return $! OP_MOVE (Reg a) (Reg b)
+       1  -> return $! OP_LOADK (Reg a) (Kst bx)
+       2  -> return $! OP_LOADKX (Reg a)
+       3  -> return $! OP_LOADBOOL (Reg a) (b /= 0) (c /= 0)
+       4  -> return $! OP_LOADNIL  (Reg a) b
+       5  -> return $! OP_GETUPVAL (Reg a) (UpIx b)
 
-       6  -> return $ OP_GETTABUP (Reg a) (UpIx b) (rk c)
-       7  -> return $ OP_GETTABLE (Reg a) (Reg b) (rk c)
+       6  -> return $! OP_GETTABUP (Reg a) (UpIx b) (rk c)
+       7  -> return $! OP_GETTABLE (Reg a) (Reg b) (rk c)
 
-       8  -> return $ OP_SETTABUP (UpIx a) (rk b) (rk c)
-       9  -> return $ OP_SETUPVAL (Reg a) (UpIx b)
-       10 -> return $ OP_SETTABLE (Reg a) (rk b) (rk c)
+       8  -> return $! OP_SETTABUP (UpIx a) (rk b) (rk c)
+       9  -> return $! OP_SETUPVAL (Reg a) (UpIx b)
+       10 -> return $! OP_SETTABLE (Reg a) (rk b) (rk c)
 
-       11 -> return $ OP_NEWTABLE (Reg a) (fb2int b) (fb2int c)
+       11 -> return $! OP_NEWTABLE (Reg a) (fb2int b) (fb2int c)
 
-       12 -> return $ OP_SELF     (Reg a) (Reg b) (rk c)
+       12 -> return $! OP_SELF     (Reg a) (Reg b) (rk c)
 
-       13 -> return $ OP_ADD      (Reg a) (rk b) (rk c)
-       14 -> return $ OP_SUB      (Reg a) (rk b) (rk c)
-       15 -> return $ OP_MUL      (Reg a) (rk b) (rk c)
-       16 -> return $ OP_MOD      (Reg a) (rk b) (rk c)
-       17 -> return $ OP_POW      (Reg a) (rk b) (rk c)
-       18 -> return $ OP_DIV      (Reg a) (rk b) (rk c)
-       19 -> return $ OP_IDIV     (Reg a) (rk b) (rk c)
-       20 -> return $ OP_BAND     (Reg a) (rk b) (rk c)
-       21 -> return $ OP_BOR      (Reg a) (rk b) (rk c)
-       22 -> return $ OP_BXOR     (Reg a) (rk b) (rk c)
-       23 -> return $ OP_SHL      (Reg a) (rk b) (rk c)
-       24 -> return $ OP_SHR      (Reg a) (rk b) (rk c)
-       25 -> return $ OP_UNM      (Reg a) (Reg b)
-       26 -> return $ OP_BNOT     (Reg a) (Reg b)
-       27 -> return $ OP_NOT      (Reg a) (Reg b)
-       28 -> return $ OP_LEN      (Reg a) (Reg b)
+       13 -> return $! OP_ADD      (Reg a) (rk b) (rk c)
+       14 -> return $! OP_SUB      (Reg a) (rk b) (rk c)
+       15 -> return $! OP_MUL      (Reg a) (rk b) (rk c)
+       16 -> return $! OP_MOD      (Reg a) (rk b) (rk c)
+       17 -> return $! OP_POW      (Reg a) (rk b) (rk c)
+       18 -> return $! OP_DIV      (Reg a) (rk b) (rk c)
+       19 -> return $! OP_IDIV     (Reg a) (rk b) (rk c)
+       20 -> return $! OP_BAND     (Reg a) (rk b) (rk c)
+       21 -> return $! OP_BOR      (Reg a) (rk b) (rk c)
+       22 -> return $! OP_BXOR     (Reg a) (rk b) (rk c)
+       23 -> return $! OP_SHL      (Reg a) (rk b) (rk c)
+       24 -> return $! OP_SHR      (Reg a) (rk b) (rk c)
+       25 -> return $! OP_UNM      (Reg a) (Reg b)
+       26 -> return $! OP_BNOT     (Reg a) (Reg b)
+       27 -> return $! OP_NOT      (Reg a) (Reg b)
+       28 -> return $! OP_LEN      (Reg a) (Reg b)
 
-       29 -> return $ OP_CONCAT   (Reg a) (Reg b) (Reg c)
+       29 -> return $! OP_CONCAT   (Reg a) (Reg b) (Reg c)
 
        30 -> let r | a == 0 = Nothing
                    | otherwise = Just (Reg (a-1))
-             in return $ OP_JMP r sBx
-       31 -> return $ OP_EQ        (a /= 0) (rk b) (rk c)
-       32 -> return $ OP_LT        (a /= 0) (rk b) (rk c)
-       33 -> return $ OP_LE        (a /= 0) (rk b) (rk c)
+             in return $! OP_JMP r sBx
+       31 -> return $! OP_EQ        (a /= 0) (rk b) (rk c)
+       32 -> return $! OP_LT        (a /= 0) (rk b) (rk c)
+       33 -> return $! OP_LE        (a /= 0) (rk b) (rk c)
 
-       34 -> return $ OP_TEST      (Reg a) (c /= 0)
-       35 -> return $ OP_TESTSET   (Reg a) (Reg b) (c /= 0)
+       34 -> return $! OP_TEST      (Reg a) (c /= 0)
+       35 -> return $! OP_TESTSET   (Reg a) (Reg b) (c /= 0)
 
-       36 -> return $ OP_CALL      (Reg a) (mkCount b) (mkCount c)
-       37 -> return $ OP_TAILCALL  (Reg a) (mkCount b) (mkCount c)
-       38 -> return $ OP_RETURN    (Reg a) (mkCount b)
+       36 -> return $! OP_CALL      (Reg a) (mkCount b) (mkCount c)
+       37 -> return $! OP_TAILCALL  (Reg a) (mkCount b) (mkCount c)
+       38 -> return $! OP_RETURN    (Reg a) (mkCount b)
 
-       39 -> return $ OP_FORLOOP   (Reg a) sBx
-       40 -> return $ OP_FORPREP   (Reg a) sBx
+       39 -> return $! OP_FORLOOP   (Reg a) sBx
+       40 -> return $! OP_FORPREP   (Reg a) sBx
 
-       41 -> return $ OP_TFORCALL  (Reg a) c
-       42 -> return $ OP_TFORLOOP  (Reg a) sBx
+       41 -> return $! OP_TFORCALL  (Reg a) c
+       42 -> return $! OP_TFORLOOP  (Reg a) sBx
 
-       43 -> return $ OP_SETLIST  (Reg a) b c
+       43 -> return $! OP_SETLIST  (Reg a) b c
 
-       44 -> return $ OP_CLOSURE  (Reg a) (ProtoIx bx)
+       44 -> return $! OP_CLOSURE  (Reg a) (ProtoIx bx)
 
-       45 -> return $ OP_VARARG   (Reg a) (mkCount b)
+       45 -> return $! OP_VARARG   (Reg a) (mkCount b)
 
-       46 -> return $ OP_EXTRAARG ax
+       46 -> return $! OP_EXTRAARG ax
 
        _  -> fail   $ "Bad instruction: 0x" ++ showHex raw ""
 
