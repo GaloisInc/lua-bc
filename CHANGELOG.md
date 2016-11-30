@@ -1,3 +1,7 @@
+0.1.0.3
+---
+* Unpack opcode fields
+
 0.1.0.2
 ---
 
