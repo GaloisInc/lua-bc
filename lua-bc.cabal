@@ -1,5 +1,5 @@
 name:                lua-bc
-version:             0.1.0.3
+version:             0.1.1
 synopsis:            Lua bytecode parser
 description:         Lua bytecode parser
 license:             MIT

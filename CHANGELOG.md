@@ -1,3 +1,7 @@
+0.1.1
+---
+* Expose Language.Lua.Bytecode.Parser.BytecodeMode
+
 0.1.0.3
 ---
 * Unpack opcode fields

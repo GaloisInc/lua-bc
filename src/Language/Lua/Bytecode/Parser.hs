@@ -9,6 +9,12 @@ module Language.Lua.Bytecode.Parser
   -- * Dump
   , dumpLuaBytecode
   , dumpLuaBytecodeFile
+
+  -- * Settings
+  , BytecodeMode(..)
+  , Sizet(..)
+  , LuacVersion(..)
+  , luaBytecodeMode53
   ) where
 
 import           Control.Applicative
@@ -71,9 +77,11 @@ parseLuaBytecodeFile :: FilePath -> IO (Either String Chunk)
 parseLuaBytecodeFile fp = parseLuaBytecode (Just fp) <$> L.readFile fp
 
 dumpLuaBytecodeFile :: FilePath -> Chunk -> IO ()
-dumpLuaBytecodeFile fp luafile = L.writeFile fp (dumpLuaBytecode mode53 luafile)
+dumpLuaBytecodeFile fp luafile =
+  L.writeFile fp (dumpLuaBytecode luaBytecodeMode53 luafile)
 
-mode53 = BytecodeMode Luac53 Sizet64
+luaBytecodeMode53 :: BytecodeMode
+luaBytecodeMode53 = BytecodeMode Luac53 Sizet64
 
 ------------------------------------------------------------------------
 
