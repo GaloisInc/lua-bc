@@ -29,7 +29,7 @@ library
                        Language.Lua.Bytecode.Debug
                        Language.Lua.Bytecode.FunId
 
-  build-depends:       base                     >=4.8  && <4.10,
+  build-depends:       base                     >=4.8  && <4.11,
                        binary                   >=0.7  && <0.9,
                        data-binary-ieee754      >=0.4  && <0.5,
                        bytestring               >=0.10 && <0.11,
